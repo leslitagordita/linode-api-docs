@@ -5552,6 +5552,63 @@ paths:
       - lang: CLI
         source: >
           linode-cli linodes type-view g6-standard-2
+  /lke/clusters:
+    x-linode-cli-command: lke
+    post:
+      x-linode-cli-action: cluster-create
+      operationId: createLKECluster
+      x-linode-charge: true
+      x-linode-grant: add_clusters
+      security:
+        - personalAccessToken: []
+        - oauth:
+          - lke:read_write
+      tags:
+      - Linode Kubernetes Engine
+      summary: Create Cluster
+      description: >
+        Creates a Kubernetes cluster. The cluster will be created
+        asynchronously. You can use the events system to determine when the
+        cluster is ready to use.
+      requestBody:
+        description: Configuration for the Kubernetes cluster.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LKECluster'
+      responses:
+        '200':
+          description: Cluster creation has started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKECluster'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+      - lang: Shell
+        source: >
+          curl -H "Content-Type: application/json" \
+               -H "Authorization: Bearer $TOKEN" \
+               -X POST -d '{
+                 "label": "cluster123",
+                 "region": "us-east",
+                 "tags": ["ecomm", "production"],
+                 "version": 1.13.5
+                 "machine_deployments": [
+                   { "name": "webnodes", "type": "g6-standard-4", "replicas": 6},
+                   { "name": "batchnodes", "type": "g6-standard-8", "replicas": 3}
+                 ]
+               }'
+               https://api.linode.com/v4/lke/clusters
+      - lang: CLI
+        source: >
+          linode-cli lke clusters-create \
+            --label cluster123 \
+            --region us-east
+            --version 1.13
+
+
   /longview/clients:
     x-linode-cli-command: longview
     get:

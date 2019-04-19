@@ -5592,12 +5592,12 @@ paths:
                -H "Authorization: Bearer $TOKEN" \
                -X POST -d '{
                  "label": "cluster123",
+                 "tags": ["ecomm", "blogs"],
                  "region": "us-east",
-                 "tags": ["ecomm", "production"],
-                 "version": 1.13.5
+                 "version": "1.13",
                  "machine_deployments": [
-                   { "name": "webnodes", "type": "g6-standard-4", "replicas": 6},
-                   { "name": "batchnodes", "type": "g6-standard-8", "replicas": 3}
+                   { "type": "g6-standard-4", "replicas": 6},
+                   { "type": "g6-standard-8", "replicas": 3}
                  ]
                }'
                https://api.linode.com/v4/lke/clusters
@@ -5605,10 +5605,8 @@ paths:
         source: >
           linode-cli lke clusters-create \
             --label cluster123 \
-            --region us-east
+            --region us-east \
             --version 1.13
-
-
   /longview/clients:
     x-linode-cli-command: longview
     get:
@@ -13067,6 +13065,44 @@ components:
             The number of VCPU cores this Linode Type offers.
           example: 2
           x-linode-cli-display: 6
+    LKECluster:
+      type: object
+      description: >
+        A Kubernetes cluster.
+      properties:
+        id:
+          type: integer
+          description: >
+            This cluster's unique ID.
+          example: 789
+          readOnly: true
+          x-linode-cli-display: 1
+        label:
+          type: string
+          description: >
+            This cluster's unique label for display purposes only. If no label
+            is provided, one will be assigned automatically.
+
+            Labels have the following constraints:
+              * Must start with an alpha character.
+              * May only consist of alphanumeric characters and dashes (`-`)
+              * Cannot have two dashes in a row
+          minLength: 3
+          maxLength: 64
+          # Kubernetes does NOT allow underscores in resource names
+          pattern: '[a-zA-Z0-9-]{3, 32}'
+          example: cluster789
+          x-linode-filterable: true
+          x-linode-cli-display: 2
+        tags:
+          type: array
+          description: >
+            An array of tags applied to this object. Tags are for
+            organizational purposes only.
+          items:
+            type: string
+          example: ["ecomm", "production"]
+          x-linode-filterable: true
     LongviewClient:
       type: object
       description: >

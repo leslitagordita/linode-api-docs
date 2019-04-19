@@ -5555,8 +5555,8 @@ paths:
   /lke/clusters:
     x-linode-cli-command: lke
     post:
-      x-linode-cli-action: cluster-create
       operationId: createLKECluster
+      x-linode-cli-action: cluster-create
       x-linode-charge: true
       x-linode-grant: add_clusters
       security:
@@ -5564,7 +5564,7 @@ paths:
         - oauth:
           - lke:read_write
       tags:
-      - Linode Kubernetes Engine
+        - Linode Kubernetes Engine
       summary: Create Cluster
       description: >
         Creates a Kubernetes cluster. The cluster will be created
@@ -5586,27 +5586,27 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
-      - lang: Shell
-        source: >
-          curl -H "Content-Type: application/json" \
-               -H "Authorization: Bearer $TOKEN" \
-               -X POST -d '{
-                 "label": "cluster123",
-                 "tags": ["ecomm", "blogs"],
-                 "region": "us-east",
-                 "version": "1.13",
-                 "machine_deployments": [
-                   { "type": "g6-standard-4", "replicas": 6},
-                   { "type": "g6-standard-8", "replicas": 3}
-                 ]
-               }'
-               https://api.linode.com/v4/lke/clusters
-      - lang: CLI
-        source: >
-          linode-cli lke clusters-create \
-            --label cluster123 \
-            --region us-east \
-            --version 1.13
+        - lang: Shell
+          source: >
+            curl -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $TOKEN" \
+                 -X POST -d '{
+                   "label": "cluster123",
+                   "tags": ["ecomm", "blogs"],
+                   "region": "us-east",
+                   "version": "1.13",
+                   "machine_deployments": [
+                     { "type": "g6-standard-4", "replicas": 6},
+                     { "type": "g6-standard-8", "replicas": 3}
+                   ]
+                 }'
+                 https://api.linode.com/v4/lke/clusters
+        - lang: CLI
+          source: >
+            linode-cli lke clusters-create \
+              --label cluster123 \
+              --region us-east \
+              --version 1.13
   /longview/clients:
     x-linode-cli-command: longview
     get:
@@ -13074,7 +13074,7 @@ components:
           type: integer
           description: >
             This cluster's unique ID.
-          example: 789
+          example: 123
           readOnly: true
           x-linode-cli-display: 1
         label:
@@ -13091,7 +13091,7 @@ components:
           maxLength: 64
           # Kubernetes does NOT allow underscores in resource names
           pattern: '[a-zA-Z0-9-]{3, 32}'
-          example: cluster789
+          example: lkecluster123
           x-linode-filterable: true
           x-linode-cli-display: 2
         tags:
@@ -13101,7 +13101,7 @@ components:
             organizational purposes only.
           items:
             type: string
-          example: ["ecomm", "production"]
+          example: ["ecomm", "blogs"]
           x-linode-filterable: true
     LongviewClient:
       type: object

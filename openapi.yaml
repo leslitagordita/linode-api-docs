@@ -5567,22 +5567,22 @@ paths:
         - Linode Kubernetes Engine
       summary: Create Cluster
       description: >
-        Creates a Kubernetes cluster. The cluster will be created
+        Creates a Kubernetes cluster. The Kubernetes cluster will be created
         asynchronously. You can use the events system to determine when the
-        cluster is ready to use.
+        Kubernetes cluster is ready to use.
       requestBody:
         description: Configuration for the Kubernetes cluster.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKECluster'
+              $ref: '#/components/schemas/LKEClusterRequest'
       responses:
         '200':
-          description: Cluster creation has started.
+          description: Kubernetes cluster creation has started.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKECluster'
+                $ref: '#/components/schemas/LKEClusterResponse'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -5592,9 +5592,9 @@ paths:
                  -H "Authorization: Bearer $TOKEN" \
                  -X POST -d '{
                    "label": "cluster123",
-                   "tags": ["ecomm", "blogs"],
                    "region": "us-east",
                    "version": "1.13",
+                   "tags": ["ecomm", "blogs"],
                    "machine_deployments": [
                      { "type": "g6-standard-4", "replicas": 6},
                      { "type": "g6-standard-8", "replicas": 3}
@@ -13065,23 +13065,16 @@ components:
             The number of VCPU cores this Linode Type offers.
           example: 2
           x-linode-cli-display: 6
-    LKECluster:
+    LKEClusterRequest:
       type: object
       description: >
         A Kubernetes cluster.
       properties:
-        id:
-          type: integer
-          description: >
-            This cluster's unique ID.
-          example: 123
-          readOnly: true
-          x-linode-cli-display: 1
         label:
           type: string
           description: >
-            This cluster's unique label for display purposes only. If no label
-            is provided, one will be assigned automatically.
+            This Kubernetes cluster's unique label for display purposes only.
+            If no label is provided, one will be assigned automatically.
 
             Labels have the following constraints:
               * Must start with an alpha character.
@@ -13089,11 +13082,14 @@ components:
               * Cannot have two dashes in a row
           minLength: 3
           maxLength: 64
-          # Kubernetes does NOT allow underscores in resource names
+          # Kubernetes does NOT allow underscores in resource names and we are
+          # passing this name to Kubernetes. Thus the following pattern.
           pattern: '[a-zA-Z0-9-]{3, 32}'
           example: lkecluster123
-          x-linode-filterable: true
-          x-linode-cli-display: 2
+        region:
+          type: string
+          description: >
+            This Kubernetes cluster's location (datacenter).
         tags:
           type: array
           description: >
@@ -13102,6 +13098,60 @@ components:
           items:
             type: string
           example: ["ecomm", "blogs"]
+        version:
+          type: string
+          description: >
+            The desired Kubernetes version for this Kubernetes cluster.
+          example: "1.14"
+    LKEClusterResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/LKEClusterRequest'
+      properties:
+        id:
+          type: integer
+          description: >
+            This cluster's unique ID.
+          readOnly: true
+          example: 123
+          x-linode-cli-display: 1
+        status:
+          type: string
+          description: >
+            A brief description of this Kubernetes cluster's current state.
+            This field may change without direction action from you.
+          readOnly: true
+          enum:
+            - provisioning
+            - running
+            - deleting
+          example: running
+          x-linode-cli-display: 4
+          x-linode-cli-color:
+            running: green
+            default_: yellow
+        created:
+          type: string
+          format: date-time
+          description: When this Kubernetes cluster was created.
+        label:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/label'
+          x-linode-filterable: true
+          x-linode-cli-display: 2
+        region:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/region'
+          readOnly: true
+          x-linode-filterable: true
+          x-linode-cli-display: 3
+        tags:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/tags'
+          x-linode-filterable: true
+        version:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/version'
           x-linode-filterable: true
     LongviewClient:
       type: object

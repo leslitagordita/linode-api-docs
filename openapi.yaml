@@ -5720,6 +5720,104 @@ paths:
             curl -H "Authorization: Bearer $TOKEN" \
             -X DELETE \
             https://api.linode.com/v4/lke/clusters/123
+  /lke/clusters/{clusterId}/pools:
+    parameters:
+      - name: clusterId
+        in: path
+        description: ID of the Cluster to look up
+        required: true
+        schema:
+          type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEClusterPools
+      x-linode-cli-action: pools-list
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_only
+      tags:
+        - Linode Kubernetes Engine
+      summary: View Node Pools
+      description: >
+        Get the Node Pools for a specific Cluster by ID.
+      responses:
+        '200':
+          description: Returns an array of all Pools in this Cluster.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKENodePoolResponse'
+                  page:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/page'
+                  pages:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/pages'
+                  results:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/results'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+                 https://api.linode.com/v4/lke/clusters/123/pools
+        - lang: CLI
+          source: >
+            linode-cli lke pools-list 123
+  /lke/clusters/{clusterId}/pools/{poolId}:
+    parameters:
+      - name: clusterId
+        in: path
+        description: ID of the Cluster to look up
+        required: true
+        schema:
+          type: integer
+      - name: poolId
+        in: path
+        description: ID of the Pool to look up
+        required: true
+        schema:
+          type: integer
+    x-linode-cli-command: lke
+    delete:
+      operationId: deleteLKENodePool
+      x-linode-cli-action: pool-delete
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_write
+      tags:
+        - Linode Kubernetes Engine
+      summary: Delete Node Pool
+      description: >-
+        Delete a specific Node Pool from a Cluster.
+
+        **Deleting a Node Pool is a destructive action and cannot be undone.**
+
+        Deleting a Node Pool will delete all Linodes within that Pool.
+      responses:
+        '200':
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+            -X DELETE \
+            https://api.linode.com/v4/lke/clusters/123/pools/456
+        - lang: CLI
+          source: >
+            linode-cli lke pool-delete 123 456
   /longview/clients:
     x-linode-cli-command: longview
     get:

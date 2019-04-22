@@ -5608,6 +5608,118 @@ paths:
               --region us-east \
               --version 1.14 \
               # you must run subsequent pool-create commands
+    get:
+      operationId: getLKEClusters
+      x-linode-cli-action: clusters-list
+      x-linode-grant: read_only
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_only
+      tags:
+        - Linode Kubernetes Engine
+      summary: List Clusters
+      description: >
+        Lists current Kubernetes clusters available on your account.
+      responses:
+        '200':
+          description: Returns an array of all Clusters on your Account.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LKEClusterResponse'
+                  page:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/page'
+                  pages:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/pages'
+                  results:
+                    $ref: '#/components/schemas/PaginationEnvelope/properties/results'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+                 https://api.linode.com/v4/lke/clusters
+        - lang: CLI
+          source: >
+            linode-cli lke clusters-list
+  /lke/clusters/{clusterId}:
+    parameters:
+      - name: clusterId
+        in: path
+        description: ID of the Cluster to look up
+        required: true
+        schema:
+          type: integer
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKECluster
+      x-linode-cli-action: cluster-view
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_only
+      tags:
+         - Linode Kubernetes Engine
+      summary: View Cluster
+      description: >
+        Get a specific Cluster by ID.
+      responses:
+        '200':
+          description: Returns a single Cluster object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKEClusterResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+                 https://api.linode.com/v4/lke/clusters/123
+        - lang: CLI
+          source: >-
+            linode-cli lke cluster-view 123
+    delete:
+      operationId: deleteLKECluster
+      x-linode-cli-action: cluster-delete
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_write
+      tags:
+        - Linode Kubernetes Engine
+      summary: Delete Cluster
+      description: >-
+        Deletes a Cluster you have permission to `read_write`.
+
+        **Deleting a Cluster is a destructive action and cannot be undone.**
+
+        Deleting a Cluster:
+          - Deletes all Linodes in all pools within this Cluster.
+          - Deletes all supporting Kubernetes services for this cluster (API server, etcd, etc)
+      responses:
+        '200':
+          description: Delete successful
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+            -X DELETE \
+            https://api.linode.com/v4/lke/clusters/123
   /longview/clients:
     x-linode-cli-command: longview
     get:

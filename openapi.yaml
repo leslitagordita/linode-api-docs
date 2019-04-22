@@ -5565,7 +5565,7 @@ paths:
           - lke:read_write
       tags:
         - Linode Kubernetes Engine
-      summary: Create Cluster
+      summary: Create Kubernetes Cluster
       description: >
         Creates a Kubernetes cluster. The Kubernetes cluster will be created
         asynchronously. You can use the events system to determine when the
@@ -5591,22 +5591,23 @@ paths:
             curl -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $TOKEN" \
                  -X POST -d '{
-                   "label": "cluster123",
+                   "label": "cluster12345",
                    "region": "us-east",
-                   "version": "1.13",
+                   "version": "1.14",
                    "tags": ["ecomm", "blogs"],
-                   "machine_deployments": [
-                     { "type": "g6-standard-4", "replicas": 6},
-                     { "type": "g6-standard-8", "replicas": 3}
+                   "node_pools": [
+                     { "type": "g6-standard-4", "count": 6},
+                     { "type": "g6-standard-8", "count": 3}
                    ]
                  }'
                  https://api.linode.com/v4/lke/clusters
         - lang: CLI
           source: >
-            linode-cli lke clusters-create \
-              --label cluster123 \
+            linode-cli lke cluster-create \
+              --label cluster12345 \
               --region us-east \
-              --version 1.13
+              --version 1.14 \
+              # you must run subsequent pool-create commands
   /longview/clients:
     x-linode-cli-command: longview
     get:
@@ -13067,8 +13068,7 @@ components:
           x-linode-cli-display: 6
     LKEClusterRequest:
       type: object
-      description: >
-        A Kubernetes cluster.
+      description: A Kubernetes cluster.
       properties:
         label:
           type: string
@@ -13078,31 +13078,44 @@ components:
 
             Labels have the following constraints:
               * Must start with an alpha character.
-              * May only consist of alphanumeric characters and dashes (`-`)
-              * Cannot have two dashes in a row
+              * Must only consist of alphanumeric characters and dashes (`-`)
+              * Must not contain two dashes in a row
           minLength: 3
-          maxLength: 64
+          maxLength: 32
           # Kubernetes does NOT allow underscores in resource names and we are
-          # passing this name to Kubernetes. Thus the following pattern.
+          # passing this name to Kubernetes. Thus the following pattern:
           pattern: '[a-zA-Z0-9-]{3, 32}'
-          example: lkecluster123
+          example: "lkecluster12345"
         region:
           type: string
-          description: >
-            This Kubernetes cluster's location (datacenter).
-        tags:
-          type: array
-          description: >
-            An array of tags applied to this object. Tags are for
-            organizational purposes only.
-          items:
-            type: string
-          example: ["ecomm", "blogs"]
+          description: This Kubernetes cluster's location (datacenter).
+          example: "us-east"
         version:
           type: string
           description: >
             The desired Kubernetes version for this Kubernetes cluster.
           example: "1.14"
+        tags:
+          type: array
+          description: >
+            An array of tags applied to the Kubernetes cluster and _all
+            resources created by the cluster_ (such as NodeBalancers and
+            Volumes). Tags are for organizational purposes only.
+          items:
+            type: string
+          example:
+           - "ecomm"
+           - "blogs"
+        node_pools:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/LKENodePoolRequest'
+          example:
+            - type: "g6-standard-4"
+              count: 6
+            - type: "g6-standard-8"
+              count: 3
     LKEClusterResponse:
       type: object
       allOf:
@@ -13110,22 +13123,21 @@ components:
       properties:
         id:
           type: integer
-          description: >
-            This cluster's unique ID.
+          description: This Kubernetes cluster's unique ID.
           readOnly: true
-          example: 123
+          example: 12345
           x-linode-cli-display: 1
         status:
           type: string
           description: >
             A brief description of this Kubernetes cluster's current state.
-            This field may change without direction action from you.
+            This field may change without direct action from you.
           readOnly: true
           enum:
-            - provisioning
-            - running
-            - deleting
-          example: running
+            - "provisioning"
+            - "running"
+            - "deleting"
+          example: "running"
           x-linode-cli-display: 4
           x-linode-cli-color:
             running: green
@@ -13145,14 +13157,115 @@ components:
           readOnly: true
           x-linode-filterable: true
           x-linode-cli-display: 3
-        tags:
-          allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/tags'
-          x-linode-filterable: true
         version:
           allOf:
             - $ref: '#/components/schemas/LKEClusterRequest/properties/version'
           x-linode-filterable: true
+        tags:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/tags'
+          x-linode-filterable: true
+        node_pools:
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequest/properties/node_pools'
+          readOnly: true
+          items:
+            allOf:
+              - $ref: '#/components/schemas/LKENodePoolResponse'
+          example:
+            - type: "g6-standard-4"
+              count: 6
+              linodes:
+                - id: 123456
+                  status: "ready"
+                - id: 123457
+                  status: "ready"
+                - id: 123458
+                  status: "ready"
+                - id: 123459
+                  status: "ready"
+                - id: 123460
+                  status: "not_ready"
+                - id: 123461
+                  status: "not_ready"
+            - type: "g6-standard-8"
+              count: 3
+              linodes:
+                - id: 123462
+                  status: "ready"
+                - id: 123463
+                  status: "ready"
+                - id: 123464
+                  status: "not_ready"
+    LKENodePoolRequest:
+      type: object
+      description: >
+        Specifies a collection of Linodes which will be members of a Kubernetes
+        cluster.
+      properties:
+        type:
+          type: string
+          description: A Linode Type for all of the nodes in the pool.
+          example: "g6-standard-4"
+        count:
+          type: number
+          description: The desired number of Linodes in the pool.
+      example:
+        type: "g6-standard-4"
+        count: 6
+    LKENodePoolResponse:
+      allOf:
+        - $ref: '#/components/schemas/LKENodePoolRequest'
+      description: >
+        The set of Node pools which are members of the Kubernetes cluster.
+        Node pools consist of a Linode type, the number of Linodes to
+        deploy of that type, and additional status information.
+      properties:
+        linodes:
+          type: array
+          description: >
+            Status information for the Linodes which are members of this node
+            pool.
+          items:
+            allOf:
+              - $ref: '#/components/schemas/LKELinodeStatusResponse'
+      example:
+        type: "g6-standard-4"
+        count: 6
+        linodes:
+          - id: 123456
+            status: "ready"
+          - id: 123457
+            status: "ready"
+          - id: 123458
+            status: "ready"
+          - id: 123459
+            status: "ready"
+          - id: 123460
+            status: "not_ready"
+          - id: 123461
+            status: "not_ready"
+    LKELinodeStatusResponse:
+      type: object
+      description: >
+        Status information for a Linode which is a member of a Kubernetes
+        cluster.
+      readOnly: true
+      properties:
+        id:
+          type: number
+          description: The Linode's ID.
+          example: 123456
+        status:
+          type: string
+          description: >
+            The Linode's status as it pertains to being a Kubernetes node.
+          enum:
+            - "ready"
+            - "not_ready"
+      example:
+        id: 123456
+        status: "ready"
     LongviewClient:
       type: object
       description: >

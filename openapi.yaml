@@ -5769,6 +5769,48 @@ paths:
         - lang: CLI
           source: >
             linode-cli lke pools-list 123
+    post:
+      operationId: postLKEClusterPools
+      x-linode-cli-action: pool-create
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_write
+      tags:
+        - Linode Kubernetes Engine
+      summary: Create Node Pool
+      description: >
+        Create a new Node Pool in a given Cluster.
+      requestBody:
+        description: Configuration for the Node Pool
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LKENodePoolRequestBody'
+      responses:
+        '200':
+          description: Node Pool has been created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePoolResponseBody'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $TOKEN" \
+                 -X POST -d '{
+                   "type": "g6-standard-4",
+                   "count": 6
+                 }'
+                 https://api.linode.com/v4/lke/clusters/123/pools
+        - lang: CLI
+          source: >
+            linode-cli lke pool-create \
+              --type g6-standard-4 \
+              --count 6 \
   /lke/clusters/{clusterId}/pools/{poolId}:
     parameters:
       - name: clusterId

@@ -5575,14 +5575,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKEClusterRequest'
+              $ref: '#/components/schemas/LKEClusterRequestBody'
       responses:
         '200':
           description: Kubernetes cluster creation has started.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKEClusterResponse'
+                $ref: '#/components/schemas/LKEClusterResponseBody'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -13066,7 +13066,7 @@ components:
             The number of VCPU cores this Linode Type offers.
           example: 2
           x-linode-cli-display: 6
-    LKEClusterRequest:
+    LKEClusterRequestBody:
       type: object
       description: A Kubernetes cluster.
       properties:
@@ -13088,7 +13088,7 @@ components:
           example: "lkecluster12345"
         region:
           type: string
-          description: This Kubernetes cluster's location (datacenter).
+          description: This Kubernetes cluster's location.
           example: "us-east"
         version:
           type: string
@@ -13110,16 +13110,17 @@ components:
           type: array
           items:
             allOf:
-              - $ref: '#/components/schemas/LKENodePoolRequest'
+              - $ref: '#/components/schemas/LKENodePoolRequestBody'
           example:
             - type: "g6-standard-4"
               count: 6
             - type: "g6-standard-8"
               count: 3
-    LKEClusterResponse:
-      type: object
+    LKEClusterResponseBody:
+      # Note that LKEClusterResponseBody inherits all properties of
+      # LKEClusterRequestBody and then overrides some of the sub-properties
       allOf:
-        - $ref: '#/components/schemas/LKEClusterRequest'
+        - $ref: '#/components/schemas/LKEClusterRequestBody'
       properties:
         id:
           type: integer
@@ -13146,32 +13147,35 @@ components:
           type: string
           format: date-time
           description: When this Kubernetes cluster was created.
+        # Note that these properties override some of the sub-properties from
+        # LKEClusterRequestBody but otherwise inherit all of the original
+        # sub-properties.
         label:
           allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/label'
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/label'
           x-linode-filterable: true
           x-linode-cli-display: 2
         region:
           allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/region'
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/region'
           readOnly: true
           x-linode-filterable: true
           x-linode-cli-display: 3
         version:
           allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/version'
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/version'
           x-linode-filterable: true
         tags:
           allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/tags'
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/tags'
           x-linode-filterable: true
         node_pools:
           allOf:
-            - $ref: '#/components/schemas/LKEClusterRequest/properties/node_pools'
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/node_pools'
           readOnly: true
           items:
             allOf:
-              - $ref: '#/components/schemas/LKENodePoolResponse'
+              - $ref: '#/components/schemas/LKENodePoolResponseBody'
           example:
             - type: "g6-standard-4"
               count: 6
@@ -13197,7 +13201,7 @@ components:
                   status: "ready"
                 - id: 123464
                   status: "not_ready"
-    LKENodePoolRequest:
+    LKENodePoolRequestBody:
       type: object
       description: >
         Specifies a collection of Linodes which will be members of a Kubernetes
@@ -13205,30 +13209,33 @@ components:
       properties:
         type:
           type: string
-          description: A Linode Type for all of the nodes in the pool.
+          description: A Linode Type for all of the nodes in the Node Pool.
           example: "g6-standard-4"
         count:
           type: number
-          description: The desired number of Linodes in the pool.
+          description: The desired number of Linodes in the Node Pool.
       example:
         type: "g6-standard-4"
         count: 6
-    LKENodePoolResponse:
+    LKENodePoolResponseBody:
+      # Note that LKENodePoolResponseBody inherits all properties of
+      # LKENodePoolRequestBody and then overrides some of the sub-properties
       allOf:
-        - $ref: '#/components/schemas/LKENodePoolRequest'
+        - $ref: '#/components/schemas/LKENodePoolRequestBody'
       description: >
-        The set of Node pools which are members of the Kubernetes cluster.
-        Node pools consist of a Linode type, the number of Linodes to
+        The set of Node Pools which are members of the Kubernetes cluster.
+        Node Pools consist of a Linode type, the number of Linodes to
         deploy of that type, and additional status information.
       properties:
         linodes:
           type: array
           description: >
-            Status information for the Linodes which are members of this node
-            pool.
+            Status information for the Linodes which are members of this Node
+            Pool. If a Linode has not been provisioned for a given Node slot,
+            its ID will be returned as null.
           items:
             allOf:
-              - $ref: '#/components/schemas/LKELinodeStatusResponse'
+              - $ref: '#/components/schemas/LKELinodeStatus'
       example:
         type: "g6-standard-4"
         count: 6
@@ -13245,7 +13252,7 @@ components:
             status: "not_ready"
           - id: 123461
             status: "not_ready"
-    LKELinodeStatusResponse:
+    LKELinodeStatus:
       type: object
       description: >
         Status information for a Linode which is a member of a Kubernetes
@@ -13254,7 +13261,9 @@ components:
       properties:
         id:
           type: number
-          description: The Linode's ID.
+          description: >
+            The Linode's ID. When no Linode is currently provisioned for this
+            Node slot, this ID will be null.
           example: 123456
         status:
           type: string

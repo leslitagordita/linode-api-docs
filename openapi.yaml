@@ -5784,6 +5784,32 @@ paths:
         schema:
           type: integer
     x-linode-cli-command: lke
+    get:
+      operationId: getLKENodePool
+      x-linode-cli-action: pool-view
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_only
+      tags:
+        - Linode Kubernetes Engine
+      summary: View Node Pool
+      description: Get a specific Node Pool by ID.
+      responses:
+        '200':
+          description: Returns a the requested Node Pool.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePoolResponseBody'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+                 https://api.linode.com/v4/lke/clusters/123/pools/456
+        - lang: CLI
+          source: >
+            linode-cli lke pool-view 123 456
     delete:
       operationId: deleteLKENodePool
       x-linode-cli-action: pool-delete

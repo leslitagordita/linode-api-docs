@@ -5852,6 +5852,48 @@ paths:
         - lang: CLI
           source: >
             linode-cli lke pool-view 123 456
+    put:
+      operationId: putLKENodePool
+      x-linode-cli-action: pool-update
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_write
+      tags:
+        - Linode Kubernetes Engine
+      summary: Update Node Pool
+      description: >
+        Updates a Node Pool. When a Node Pool's parameters are
+        changed, the nodes in that pool will be replaced in a rolling
+        fashion.
+      requestBody:
+        description: The fields to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LKENodePoolRequestBody'
+      responses:
+        '200':
+          description: Node Pool was successfully modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKENodePoolResponseBody'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $TOKEN" \
+                 -X PUT -d '{
+                   "type": "g6-standard-4",
+                   "count": 6
+                 }'
+                 https://api.linode.com/v4/lke/clusters/123/pools/456
+        - lang: CLI
+          source: >
+            linode-cli lke pool-update 123 456 \
+              --type g6-standard-4 \
+              --count 6 \
     delete:
       operationId: deleteLKENodePool
       x-linode-cli-action: pool-delete

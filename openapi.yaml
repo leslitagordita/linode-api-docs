@@ -5738,7 +5738,7 @@ paths:
             - lke:read_only
       tags:
         - Linode Kubernetes Engine
-      summary: View Node Pools
+      summary: List Node Pools
       description: >
         Get the Node Pools for a specific Cluster by ID.
       responses:

@@ -5632,7 +5632,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/LKEClusterResponse'
+                      $ref: '#/components/schemas/LKEClusterResponseBody'
                   page:
                     $ref: '#/components/schemas/PaginationEnvelope/properties/page'
                   pages:
@@ -5676,7 +5676,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKEClusterResponse'
+                $ref: '#/components/schemas/LKEClusterResponseBody'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -5752,7 +5752,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/LKENodePoolResponse'
+                      $ref: '#/components/schemas/LKENodePoolResponseBody'
                   page:
                     $ref: '#/components/schemas/PaginationEnvelope/properties/page'
                   pages:

@@ -5683,10 +5683,10 @@ paths:
         - lang: Shell
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
-                 https://api.linode.com/v4/lke/clusters/123
+                 https://api.linode.com/v4/lke/clusters/12345
         - lang: CLI
           source: >-
-            linode-cli lke cluster-view 123
+            linode-cli lke cluster-view 12345
     delete:
       operationId: deleteLKECluster
       x-linode-cli-action: cluster-delete
@@ -5723,7 +5723,7 @@ paths:
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
                  -X DELETE \
-                 https://api.linode.com/v4/lke/clusters/123
+                 https://api.linode.com/v4/lke/clusters/12345
   /lke/clusters/{clusterId}/pools:
     parameters:
       - name: clusterId
@@ -5769,10 +5769,10 @@ paths:
         - lang: Shell
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
-                 https://api.linode.com/v4/lke/clusters/123/pools
+                 https://api.linode.com/v4/lke/clusters/12345/pools
         - lang: CLI
           source: >
-            linode-cli lke pools-list 123
+            linode-cli lke pools-list 12345
     post:
       operationId: postLKEClusterPools
       x-linode-cli-action: pool-create
@@ -5809,7 +5809,7 @@ paths:
                    "type": "g6-standard-4",
                    "count": 6
                  }'
-                 https://api.linode.com/v4/lke/clusters/123/pools
+                 https://api.linode.com/v4/lke/clusters/12345/pools
         - lang: CLI
           source: >
             linode-cli lke pool-create \
@@ -5852,10 +5852,10 @@ paths:
         - lang: Shell
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
-                 https://api.linode.com/v4/lke/clusters/123/pools/456
+                 https://api.linode.com/v4/lke/clusters/12345/pools/456
         - lang: CLI
           source: >
-            linode-cli lke pool-view 123 456
+            linode-cli lke pool-view 12345 456
     put:
       operationId: putLKENodePool
       x-linode-cli-action: pool-update
@@ -5892,10 +5892,10 @@ paths:
                    "type": "g6-standard-4",
                    "count": 6
                  }'
-                 https://api.linode.com/v4/lke/clusters/123/pools/456
+                 https://api.linode.com/v4/lke/clusters/12345/pools/456
         - lang: CLI
           source: >
-            linode-cli lke pool-update 123 456 \
+            linode-cli lke pool-update 12345 456 \
               --type g6-standard-4 \
               --count 6 \
     delete:
@@ -5928,10 +5928,10 @@ paths:
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
                  -X DELETE \
-                 https://api.linode.com/v4/lke/clusters/123/pools/456
+                 https://api.linode.com/v4/lke/clusters/12345/pools/456
         - lang: CLI
           source: >
-            linode-cli lke pool-delete 123 456
+            linode-cli lke pool-delete 12345 456
   /lke/clusters/{clusterId}/kubeconfig:
     parameters:
       - name: clusterId
@@ -5972,10 +5972,10 @@ paths:
         - lang: Shell
           source: >
             curl -H "Authorization: Bearer $TOKEN" \
-                 https://api.linode.com/v4/lke/clusters/123/kubeconfig
+                 https://api.linode.com/v4/lke/clusters/12345/kubeconfig
         - lang: CLI
           source: >
-            linode-cli lke kubeconfig-view 123
+            linode-cli lke kubeconfig-view 12345
   /longview/clients:
     x-linode-cli-command: longview
     get:

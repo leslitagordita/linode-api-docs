@@ -5703,10 +5703,12 @@ paths:
         **Deleting a Cluster is a destructive action and cannot be undone.**
 
         Deleting a Cluster:
-          - Deletes all Linodes in all pools within this cluster
-          - Deletes all supporting Kubernetes services for this cluster (API server, etcd, etc)
-          - Deletes all NodeBalancers created by the cluster
-          - Does not delete any of the volumes created by this cluster
+          - Deletes all Linodes in all pools within this Kubernetes cluster
+          - Deletes all supporting Kubernetes services for this Kubernetes
+            cluster (API server, etcd, etc)
+          - Deletes all NodeBalancers created by this Kubernetes cluster
+          - Does not delete any of the volumes created by this Kubernetes
+            cluster
       responses:
         '200':
           description: Delete successful
@@ -13465,8 +13467,8 @@ components:
           type: array
           description: >
             An array of tags applied to the Kubernetes cluster and _all
-            resources created by the cluster_ (such as NodeBalancers and
-            Volumes). Tags are for organizational purposes only.
+            resources created by the Kubernetes cluster_ (such as NodeBalancers
+            and Volumes). Tags are for organizational purposes only.
           items:
             type: string
           example:

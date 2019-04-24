@@ -5632,7 +5632,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/LKEClusterResponseBody'
+                      $ref: '#/components/schemas/LKECluster'
                   page:
                     $ref: '#/components/schemas/PaginationEnvelope/properties/page'
                   pages:
@@ -5676,7 +5676,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKEClusterResponseBody'
+                $ref: '#/components/schemas/LKECluster'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -5703,8 +5703,10 @@ paths:
         **Deleting a Cluster is a destructive action and cannot be undone.**
 
         Deleting a Cluster:
-          - Deletes all Linodes in all pools within this Cluster.
+          - Deletes all Linodes in all pools within this cluster
           - Deletes all supporting Kubernetes services for this cluster (API server, etcd, etc)
+          - Deletes all NodeBalancers created by the cluster
+          - Does not delete any of the volumes created by this cluster
       responses:
         '200':
           description: Delete successful
@@ -5752,7 +5754,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/LKENodePoolResponseBody'
+                      $ref: '#/components/schemas/LKENodePool'
                   page:
                     $ref: '#/components/schemas/PaginationEnvelope/properties/page'
                   pages:
@@ -5793,7 +5795,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKENodePoolResponseBody'
+                $ref: '#/components/schemas/LKENodePool'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -5843,7 +5845,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKENodePoolResponseBody'
+                $ref: '#/components/schemas/LKENodePool'
       x-code-samples:
         - lang: Shell
           source: >
@@ -5878,7 +5880,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKENodePoolResponseBody'
+                $ref: '#/components/schemas/LKENodePool'
       x-code-samples:
         - lang: Shell
           source: >

@@ -5618,7 +5618,7 @@ paths:
             - lke:read_only
       tags:
         - Linode Kubernetes Engine
-      summary: List Clusters
+      summary: List Kubernetes Clusters
       description: >
         Lists current Kubernetes clusters available on your account.
       responses:
@@ -5667,7 +5667,7 @@ paths:
             - lke:read_only
       tags:
          - Linode Kubernetes Engine
-      summary: View Cluster
+      summary: View Kubernetes Cluster
       description: >
         Get a specific Cluster by ID.
       responses:
@@ -5696,7 +5696,7 @@ paths:
             - lke:read_write
       tags:
         - Linode Kubernetes Engine
-      summary: Delete Cluster
+      summary: Delete Kubernetes Cluster
       description: >-
         Deletes a Cluster you have permission to `read_write`.
 

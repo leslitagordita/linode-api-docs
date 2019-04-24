@@ -5582,7 +5582,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LKEClusterResponseBody'
+                $ref: '#/components/schemas/LKECluster'
         default:
           $ref: '#/components/responses/ErrorResponse'
       x-code-samples:
@@ -13116,8 +13116,8 @@ components:
               count: 6
             - type: "g6-standard-8"
               count: 3
-    LKEClusterResponseBody:
-      # Note that LKEClusterResponseBody inherits all properties of
+    LKECluster:
+      # Note that LKECluster inherits all properties of
       # LKEClusterRequestBody and then overrides some of the sub-properties
       allOf:
         - $ref: '#/components/schemas/LKEClusterRequestBody'
@@ -13175,7 +13175,7 @@ components:
           readOnly: true
           items:
             allOf:
-              - $ref: '#/components/schemas/LKENodePoolResponseBody'
+              - $ref: '#/components/schemas/LKENodePool'
           example:
             - type: "g6-standard-4"
               count: 6
@@ -13217,8 +13217,8 @@ components:
       example:
         type: "g6-standard-4"
         count: 6
-    LKENodePoolResponseBody:
-      # Note that LKENodePoolResponseBody inherits all properties of
+    LKENodePool:
+      # Note that LKENodePool inherits all properties of
       # LKENodePoolRequestBody and then overrides some of the sub-properties
       allOf:
         - $ref: '#/components/schemas/LKENodePoolRequestBody'

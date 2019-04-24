@@ -5623,7 +5623,7 @@ paths:
         Lists current Kubernetes clusters available on your account.
       responses:
         '200':
-          description: Returns an array of all Clusters on your Account.
+          description: Returns an array of all Kubernetes clusters on your Account.
           content:
             application/json:
               schema:
@@ -5653,7 +5653,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: ID of the Cluster to look up
+        description: ID of the Kubernetes cluster to look up
         required: true
         schema:
           type: integer
@@ -5672,7 +5672,7 @@ paths:
         Get a specific Cluster by ID.
       responses:
         '200':
-          description: Returns a single Cluster object.
+          description: Returns a single Kubernetes cluster.
           content:
             application/json:
               schema:
@@ -5728,7 +5728,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: ID of the Cluster to look up
+        description: ID of the Kubernetes cluster to look up
         required: true
         schema:
           type: integer
@@ -5744,10 +5744,10 @@ paths:
         - Linode Kubernetes Engine
       summary: List Node Pools
       description: >
-        Get the Node Pools for a specific Cluster by ID.
+        Get the Node Pools for a specific Kubernetes cluster by ID.
       responses:
         '200':
-          description: Returns an array of all Pools in this Cluster.
+          description: Returns an array of all Pools in this Kubernetes cluster.
           content:
             application/json:
               schema:
@@ -5784,7 +5784,7 @@ paths:
         - Linode Kubernetes Engine
       summary: Create Node Pool
       description: >
-        Create a new Node Pool in a given Cluster.
+        Create a new Node Pool in a given Kubernetes cluster.
       requestBody:
         description: Configuration for the Node Pool
         content:
@@ -5819,7 +5819,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: ID of the Cluster to look up
+        description: ID of the Kubernetes cluster to look up
         required: true
         schema:
           type: integer
@@ -5909,7 +5909,7 @@ paths:
         - Linode Kubernetes Engine
       summary: Delete Node Pool
       description: >-
-        Delete a specific Node Pool from a Cluster.
+        Delete a specific Node Pool from a Kubernetes cluster.
 
         **Deleting a Node Pool is a destructive action and cannot be undone.**
 
@@ -5936,7 +5936,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: ID of the Cluster to look up
+        description: ID of the Kubernetes cluster to look up
         required: true
         schema:
           type: integer
@@ -5955,7 +5955,7 @@ paths:
         Get the Kubeconfig file for a Cluster.
       responses:
         '200':
-          description: Returns the Base64-encoded Kubeconfig file for this Cluster.
+          description: Returns the Base64-encoded Kubeconfig file for this Kubernetes cluster.
           content:
             application/json:
               schema:

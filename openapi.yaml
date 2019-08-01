@@ -13484,6 +13484,10 @@ components:
               count: 6
             - type: "g6-standard-8"
               count: 3
+      required:
+        - label
+        - region
+        - node_pools
     LKECluster:
       # Note that LKECluster inherits all properties of
       # LKEClusterRequestBody and then overrides some of the sub-properties

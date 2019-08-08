@@ -5685,8 +5685,49 @@ paths:
             curl -H "Authorization: Bearer $TOKEN" \
                  https://api.linode.com/v4/lke/clusters/12345
         - lang: CLI
-          source: >-
+          source:
             linode-cli lke cluster-view 12345
+    put:
+      operationId: putLKECluster
+      x-linode-cli-action: cluster-put
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_write
+      tags:
+        - Linode Kubernetes Engine
+      summary: Update Kubernetes Cluster
+      description: >
+        Updates a Kubernetes cluster. Only a cluster's
+        `label` can be updated.
+      requestBody:
+        description: The fields to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LKEClusterPutRequestBody'
+      responses:
+        '200':
+          description: Returns a single Kubernetes cluster..
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKECluster'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $TOKEN" \
+                 -X PUT -d '{
+                   "type": "g6-standard-4",
+                   "count": 6
+                 }'
+                 https://api.linode.com/v4/lke/clusters/12345/pools/456
+        - lang: CLI
+          source: >
+            linode-cli lke pool-update 12345 456 \
+              --type g6-standard-4 \
+              --count 6 \
     delete:
       operationId: deleteLKECluster
       x-linode-cli-action: cluster-delete
@@ -5875,7 +5916,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKENodePoolRequestBody'
+              $ref: '#/components/schemas/LKEClusterPutRequestBody'
       responses:
         '200':
           description: Node Pool was successfully modified.
@@ -13573,6 +13614,26 @@ components:
                   status: "ready"
                 - id: 123464
                   status: "not_ready"
+    LKEClusterPutRequestBody:
+      type: object
+      description: A Kubernetes cluster.
+      properties:
+        label:
+          type: string
+          description: >
+            This Kubernetes cluster's unique label for display purposes only.
+            If no label is provided, one will be assigned automatically.
+
+            Labels have the following constraints:
+              * Must start with an alpha character.
+              * Must only consist of alphanumeric characters and dashes (`-`)
+              * Must not contain two dashes in a row
+          minLength: 3
+          maxLength: 32
+          # Kubernetes does NOT allow underscores in resource names and we are
+          # passing this name to Kubernetes. Thus the following pattern:
+          pattern: '[a-zA-Z0-9-]{3, 32}'
+          example: "lkecluster12345"
     LKENodePoolRequestBody:
       type: object
       description: >

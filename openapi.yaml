@@ -5653,7 +5653,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: ID of the Kubernetes cluster to look up
+        description: The ID of the Kubernetes cluster to look up.
         required: true
         schema:
           type: integer
@@ -13486,7 +13486,7 @@ components:
             If no label is provided, one will be assigned automatically.
 
             Labels have the following constraints:
-              * Must start with an alpha character.
+              * Must start with an alpha character
               * Must only consist of alphanumeric characters and dashes (`-`)
               * Must not contain two dashes in a row
           minLength: 3
@@ -13560,6 +13560,12 @@ components:
           type: string
           format: date-time
           description: When this Kubernetes cluster was created.
+          example: "2019-09-12T21:25:30Z"
+        updated:
+          type: string
+          format: date-time
+          description: When this Kubernetes cluster was updated.
+          example: "2019-09-13T21:24:16Z"
         # Note that these properties override some of the sub-properties from
         # LKEClusterRequestBody but otherwise inherit all of the original
         # sub-properties.
@@ -13619,21 +13625,8 @@ components:
       description: A Kubernetes cluster.
       properties:
         label:
-          type: string
-          description: >
-            This Kubernetes cluster's unique label for display purposes only.
-            If no label is provided, one will be assigned automatically.
-
-            Labels have the following constraints:
-              * Must start with an alpha character.
-              * Must only consist of alphanumeric characters and dashes (`-`)
-              * Must not contain two dashes in a row
-          minLength: 3
-          maxLength: 32
-          # Kubernetes does NOT allow underscores in resource names and we are
-          # passing this name to Kubernetes. Thus the following pattern:
-          pattern: '[a-zA-Z0-9-]{3, 32}'
-          example: "lkecluster12345"
+          allOf:
+            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/label'
     LKENodePoolRequestBody:
       type: object
       description: >

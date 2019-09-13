@@ -5766,6 +5766,9 @@ paths:
             curl -H "Authorization: Bearer $TOKEN" \
                  -X DELETE \
                  https://api.linode.com/v4/lke/clusters/12345
+        - lang: CLI
+          source: >
+            linode-cli lke cluster-delete 12345
   /lke/clusters/{clusterId}/pools:
     parameters:
       - name: clusterId

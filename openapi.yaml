@@ -13651,6 +13651,10 @@ components:
         Node Pools consist of a Linode type, the number of Linodes to
         deploy of that type, and additional status information.
       properties:
+        id:
+          type: integer
+          description: >
+           This Node Pool's unique ID.
         linodes:
           type: array
           description: >
@@ -13661,6 +13665,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/LKELinodeStatus'
       example:
+        id: 456
         type: "g6-standard-4"
         count: 6
         linodes:

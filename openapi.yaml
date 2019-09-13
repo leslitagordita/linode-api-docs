@@ -6049,6 +6049,41 @@ paths:
         - lang: CLI
           source: >
             linode-cli lke versions-list
+  /lke/versions/{version}:
+    x-linode-cli-command: lke
+    get:
+      operationId: getLKEVersion
+      x-linode-cli-action: version-view
+      x-linode-grant: read_only
+      security:
+        - personalAccessToken: []
+        - oauth:
+            - lke:read_only
+      tags:
+        - Linode Kubernetes Engine
+      summary: View Kubernetes Version
+      description: >
+        View a Kubernetes version available for deployment
+        to a Kubernetes cluster.
+      responses:
+        '200':
+          description: >
+            Returns a Kubernetes version object that is available for deployment
+            to a Kubernetes cluster.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LKEVersion'
+        default:
+            $ref: '#/components/responses/ErrorResponse'
+      x-code-samples:
+        - lang: Shell
+          source: >
+            curl -H "Authorization: Bearer $TOKEN" \
+                 https://api.linode.com/v4/lke/versions/1.15
+        - lang: CLI
+          source: >
+            linode-cli lke version-view 1.15
   /longview/clients:
     x-linode-cli-command: longview
     get:
@@ -13752,7 +13787,7 @@ components:
           description: >
             A Kubernetes version number available for deployment
             to a Kubernetes cluster.
-          example: "1.14"
+          example: "1.15"
     LongviewClient:
       type: object
       description: >

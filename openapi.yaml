@@ -5651,12 +5651,7 @@ paths:
               # you must run subsequent pool-create commands
   /lke/clusters/{clusterId}:
     parameters:
-      - name: clusterId
-        in: path
-        description: ID of the Kubernetes cluster to look up.
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/clusterId'
     x-linode-cli-command: lke
     get:
       operationId: getLKECluster
@@ -5771,12 +5766,7 @@ paths:
             linode-cli lke cluster-delete 12345
   /lke/clusters/{clusterId}/pools:
     parameters:
-      - name: clusterId
-        in: path
-        description: ID of the Kubernetes cluster to look up
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/clusterId'
     x-linode-cli-command: lke
     get:
       operationId: getLKEClusterPools
@@ -5862,12 +5852,7 @@ paths:
               --count 6 \
   /lke/clusters/{clusterId}/pools/{poolId}:
     parameters:
-      - name: clusterId
-        in: path
-        description: ID of the Kubernetes cluster to look up
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/clusterId'
       - name: poolId
         in: path
         description: ID of the Pool to look up
@@ -5981,12 +5966,7 @@ paths:
             linode-cli lke pool-delete 12345 456
   /lke/clusters/{clusterId}/kubeconfig:
     parameters:
-      - name: clusterId
-        in: path
-        description: ID of the Kubernetes cluster to look up
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/clusterId'
     x-linode-cli-command: lke
     get:
       operationId: getLKEClusterKubeconfig
@@ -10916,6 +10896,13 @@ components:
         minimum: 25
         maximum: 100
         default: 100
+    clusterId:
+        name: clusterId
+        in: path
+        description: ID of the Kubernetes cluster to look up.
+        required: true
+        schema:
+          type: integer
   links:
     bootLinode:
       operationId: bootLinodeInstance

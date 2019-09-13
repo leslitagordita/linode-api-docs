@@ -5698,14 +5698,17 @@ paths:
         - Linode Kubernetes Engine
       summary: Update Kubernetes Cluster
       description: >
-        Updates a Kubernetes cluster. Only a cluster's
-        `label` can be updated.
+        Updates a Kubernetes cluster.
       requestBody:
         description: The fields to update
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKEClusterPutRequestBody'
+              type: object
+              properties:
+                label:
+                  allOf:
+                    - $ref: '#/components/schemas/LKEClusterRequestBody/properties/label'
       responses:
         '200':
           description: Returns a single Kubernetes cluster..
@@ -5916,7 +5919,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKEClusterPutRequestBody'
+              $ref: '#/components/schemas/LKECluster'
       responses:
         '200':
           description: Node Pool was successfully modified.
@@ -13620,13 +13623,6 @@ components:
                   status: "ready"
                 - id: 123464
                   status: "not_ready"
-    LKEClusterPutRequestBody:
-      type: object
-      description: A Kubernetes cluster.
-      properties:
-        label:
-          allOf:
-            - $ref: '#/components/schemas/LKEClusterRequestBody/properties/label'
     LKENodePoolRequestBody:
       type: object
       description: >

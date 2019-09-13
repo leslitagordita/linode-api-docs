@@ -5689,7 +5689,7 @@ paths:
             linode-cli lke cluster-view 12345
     put:
       operationId: putLKECluster
-      x-linode-cli-action: cluster-put
+      x-linode-cli-action: cluster-update
       security:
         - personalAccessToken: []
         - oauth:
@@ -5722,15 +5722,13 @@ paths:
             curl -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $TOKEN" \
                  -X PUT -d '{
-                   "type": "g6-standard-4",
-                   "count": 6
+                   "label": "lkecluster54321"
                  }'
-                 https://api.linode.com/v4/lke/clusters/12345/pools/456
+                 https://api.linode.com/v4/lke/clusters/12345
         - lang: CLI
           source: >
-            linode-cli lke pool-update 12345 456 \
-              --type g6-standard-4 \
-              --count 6 \
+            linode-cli lke cluster-update 12345 \
+              --label lkecluster54321
     delete:
       operationId: deleteLKECluster
       x-linode-cli-action: cluster-delete

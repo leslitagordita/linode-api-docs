@@ -5911,7 +5911,7 @@ paths:
         - Linode Kubernetes Engine
       summary: Update Node Pool
       description: >
-        Updates a Node Pool. When a Node Pool's parameters are
+        Updates a Node Pool. When a Node Pool's count are
         changed, the nodes in that pool will be replaced in a rolling
         fashion.
       requestBody:
@@ -5919,7 +5919,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LKECluster'
+              type: object
+              properties:
+                count:
+                  allOf:
+                    - $ref: '#/components/schemas/LKENodePoolRequestBody/properties/count'
       responses:
         '200':
           description: Node Pool was successfully modified.
@@ -5933,14 +5937,12 @@ paths:
             curl -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $TOKEN" \
                  -X PUT -d '{
-                   "type": "g6-standard-4",
                    "count": 6
                  }'
                  https://api.linode.com/v4/lke/clusters/12345/pools/456
         - lang: CLI
           source: >
             linode-cli lke pool-update 12345 456 \
-              --type g6-standard-4 \
               --count 6 \
     delete:
       operationId: deleteLKENodePool

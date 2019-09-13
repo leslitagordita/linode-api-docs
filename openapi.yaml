@@ -5653,7 +5653,7 @@ paths:
     parameters:
       - name: clusterId
         in: path
-        description: The ID of the Kubernetes cluster to look up.
+        description: ID of the Kubernetes cluster to look up.
         required: true
         schema:
           type: integer
@@ -5785,7 +5785,7 @@ paths:
         - Linode Kubernetes Engine
       summary: List Node Pools
       description: >
-        Get the Node Pools for a specific Kubernetes cluster by ID.
+        Returns all active Node Pools on a Kubernetes cluster.
       responses:
         '200':
           description: Returns an array of all Pools in this Kubernetes cluster.
@@ -5825,7 +5825,7 @@ paths:
         - Linode Kubernetes Engine
       summary: Create Node Pool
       description: >
-        Create a new Node Pool in a given Kubernetes cluster.
+        Creates a new Node Pool for the designated Kubernetes cluster.
       requestBody:
         description: Configuration for the Node Pool
         content:

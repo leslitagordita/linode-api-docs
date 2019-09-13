@@ -13693,6 +13693,7 @@ components:
           description: >
             The Linode's ID. When no Linode is currently provisioned for this
             Node slot, this ID will be null.
+          x-linode-filterable: true
           example: 123456
         status:
           type: string

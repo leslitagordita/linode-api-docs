@@ -13634,8 +13634,10 @@ components:
           description: A Linode Type for all of the nodes in the Node Pool.
           example: "g6-standard-4"
         count:
-          type: number
+          type: integer
           description: The desired number of Linodes in the Node Pool.
+          minimum: 1
+          maximum: 100
       example:
         type: "g6-standard-4"
         count: 6
